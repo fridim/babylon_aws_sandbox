@@ -47,7 +47,8 @@
             sandbox_name: "{{ query1.Items[0].name.S }}"
             sandbox_zone: "{{ query1.Items[0].zone.S }}"
             sandbox_hosted_zone_id: "{{ query1.Items[0].hosted_zone_id.S }}"
-            sandbox_account: "{{ query1.Items[0].name.S }}"
+            sandbox_account: "{{ query1.Items[0].account_id.S }}"
+            sandbox_account_id: "{{ query1.Items[0].account_id.S }}"
             sandbox_aws_access_key_id: "{{ query1.Items[0].aws_access_key_id.S }}"
 
         - vars:
@@ -192,6 +193,7 @@
           set_fact:
             sandbox_name: "{{ _item.name.S }}"
             sandbox_account: "{{ _item.account_id.S }}"
+            sandbox_account_id: "{{ _item.account_id.S }}"
             sandbox_zone: "{{ _item.zone.S }}"
             sandbox_hosted_zone_id: "{{ _item.hosted_zone_id.S }}"
             sandbox_aws_access_key_id: "{{ _item.aws_access_key_id.S }}"
@@ -211,6 +213,11 @@
     aws_sandbox_secrets:
       sandbox_aws_access_key_id: "{{ sandbox_aws_access_key_id }}"
       sandbox_aws_secret_access_key: "{{ sandbox_aws_secret_access_key }}"
+      sandbox_hosted_zone_id: "{{ sandbox_hosted_zone_id }}"
+      sandbox_name: "{{ sandbox_name }}"
+      sandbox_account: "{{ sandbox_account }}"
+      sandbox_account_id: "{{ sandbox_account_id }}"
+      sandbox_zone: "{{ sandbox_zone }}"
       # agnosticd
       aws_access_key_id: "{{ sandbox_aws_access_key_id }}"
       aws_secret_access_key: "{{ sandbox_aws_secret_access_key }}"
