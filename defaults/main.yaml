@@ -11,15 +11,15 @@ env_type: >-
   | default(None) }}
 
 email: >-
-  {{ vars.anarchy_governor.vars.job_vars.email
+  {{ vars.anarchy_subject.metadata.annotations['poolboy.gpte.redhat.com/resource-requester-email']
+  | default(vars.anarchy_subject.vars.job_vars.requester_email)
   | default(vars.anarchy_subject.vars.job_vars.email)
-  | default(babylon_user_email)
   | default(None) }}
 
 student_name: >-
-  {{  vars.anarchy_governor.vars.job_vars.student_name
+  {{ vars.anarchy_subject.metadata.annotations['poolboy.gpte.redhat.com/resource-requester-user']
+  | default(vars.anarchy_subject.vars.job_vars.requester_username)
   | default(vars.anarchy_subject.vars.job_vars.student_name)
-  | default(babylon_username)
   | default('babylon') }}
 
 # minimum age the sandbox must be before it's selected from the pool
