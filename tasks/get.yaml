@@ -14,11 +14,16 @@
           and attribute_exists(hosted_zone_id)
           and attribute_exists(#Z)
           and attribute_exists(account_id)
+          and (
+            attribute_not_exists(service_uuid) or service_uuid = :u
+          )
         _data:
           ":a":
             BOOL: false
           ":g":
             S: "{{ guid }}"
+          ":u":
+            S: "{{ uuid }}"
           ":e":
             S: "{{ env_type }}"
       command: >-
@@ -144,6 +149,8 @@
                 BOOL: true
               ":gu":
                 S: "{{ guid }}"
+              ":uu":
+                S: "{{ uuid }}"
               ":en":
                 S: "{{ env_type }}"
               ":ow":
@@ -162,6 +169,7 @@
             --update-expression
             "SET available = :av,
             guid = :gu, envtype = :en,
+            service_uuid = :uu,
             #o = :ow, owner_email = :email,
             #c = :co"
             --expression-attribute-values '{{ _data | to_json }}'

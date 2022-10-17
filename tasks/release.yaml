@@ -14,11 +14,16 @@
           and attribute_exists(hosted_zone_id)
           and attribute_exists(#Z)
           and attribute_exists(account_id)
+          and (
+            attribute_not_exists(service_uuid) or service_uuid = :u
+          )
         _data:
           ":a":
             BOOL: false
           ":g":
             S: "{{ guid }}"
+          ":u":
+            S: "{{ uuid }}"
           ":e":
             S: "{{ env_type }}"
       command: >-
