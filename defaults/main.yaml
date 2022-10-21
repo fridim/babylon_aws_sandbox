@@ -4,6 +4,9 @@ buffer: 20
 # Variables from Anarchy Subject
 guid: "{{ vars.anarchy_subject.vars.job_vars.guid | default(None) }}"
 
+# Variables from Anarchy Subject
+uuid: "{{ vars.anarchy_subject.vars.job_vars.uuid | default(None) }}"
+
 # Variables from either Governor or Subject
 env_type: >-
   {{ vars.anarchy_governor.vars.job_vars.env_type
