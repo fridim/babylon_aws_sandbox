@@ -16,19 +16,22 @@
         - anarchy_action_callback_name is not defined
       include_tasks: get.yaml
 
-    - name: Mark sandbox for cleanup (destroy complete or failed)
+    - name: Mark sandbox for cleanup (destroy complete, failed, or disabled)
       when: >-
         (
           'destroy' == anarchy_action_config_name | default('')
           and
           'complete' == anarchy_action_callback_name | default('')
         ) or
+        'destroy-error' == current_state | default('') or
         'destroy-failed' == current_state | default('') or
-        'destroy-canceled' == current_state | default('')
+        'destroy-canceled' == current_state | default('') or
+        __meta__.deployer.actions.destroy.disable | default(false) | bool
       include_tasks: release.yaml
 
     - name: Complete deletion anarchy subject on destroy failure
       when: >-
+        'destroy-error' == current_state | default('') or
         'destroy-failed' == current_state | default('') or
         'destroy-canceled' == current_state | default('')
       anarchy_subject_delete:
