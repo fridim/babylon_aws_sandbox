@@ -27,7 +27,7 @@
         'destroy-failed' == current_state | default('') or
         'destroy-canceled' == current_state | default('') or
         (
-          'delete' == anarchy_event_name
+          'delete' == anarchy_event_name | default('')
           and
           __meta__.deployer.actions.destroy.disable | default(false) | bool
         )
