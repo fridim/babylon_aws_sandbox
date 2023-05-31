@@ -26,7 +26,11 @@
         'destroy-error' == current_state | default('') or
         'destroy-failed' == current_state | default('') or
         'destroy-canceled' == current_state | default('') or
-        __meta__.deployer.actions.destroy.disable | default(false) | bool
+        (
+          'delete' == anarchy_event_name
+          and
+          __meta__.deployer.actions.destroy.disable | default(false) | bool
+        )
       include_tasks: release.yaml
 
     - name: Complete deletion anarchy subject on destroy failure
