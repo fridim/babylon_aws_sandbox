@@ -1,4 +1,5 @@
 - block:
+    # TODO: save the encrypted text as a file and pass the vault password as stdin instead.
     - name: Create tempfile to store vault password
       tempfile:
         state: file
