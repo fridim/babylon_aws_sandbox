@@ -6,5 +6,7 @@
 
 # If placement was not found, it's safe to run legacy code to mark to cleanup
 # any account which match uuid.
+# TODO: remove later
+# (when everything is using the sandbox-api and all services have a Placement in DB)
 - when: r_del.status == 404
   include_tasks: legacy_release.yaml
