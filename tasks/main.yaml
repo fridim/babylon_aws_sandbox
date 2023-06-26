@@ -8,7 +8,7 @@
 
     - include_tasks: pre_checks.yaml
 
-    - name: Get sandbox when it needs to be passed to tower job
+    - name: Get sandbox when it needs to be passed to Tower or Controller
       when:
         # Do nothing unless executing an action
         - anarchy_action_config_name is defined

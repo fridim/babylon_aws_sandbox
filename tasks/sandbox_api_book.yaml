@@ -1,0 +1,50 @@
+---
+- name: Set ocp_console_url
+  set_fact:
+    ocp_console_url: "{{ r_ocp_console_public.resources[0].data.consoleURL | default('') }}"
+
+- name: Get a placement, book 1 aws sandbox
+  uri:
+    headers:
+      Authorization: Bearer {{ access_token }}
+    url: "{{ sandbox_api_url }}/api/v1/placements"
+    method: POST
+    body_format: json
+    body:
+      service_uuid: "{{ uuid }}"
+      annotations:
+        guid: "{{ guid }}"
+        env_type: "{{ env_type }}"
+        owner: "{{ student_name | default('unknown') }}"
+        owner_email: "{{ email | default('unkonwn') }}"
+        comment: "sandbox-api {{ ocp_console_url }}"
+      resources:
+        # TODO: parameterize this so one can order several accounts
+        - kind: AwsSandbox
+          count: 1
+  register: r_new_placement
+  retries: sandbox_api_retries
+  delay: sandbox_api_delay
+  until: r_new_placement is succeeded
+
+- name: Save placement
+  set_fact:
+    placement: "{{ r_new_placement.json.Placement }}"
+
+- set_fact:
+    sandbox_name: "{{ placement.resources[0].name }}"
+    sandbox_zone: "{{ placement.resources[0].zone }}"
+    sandbox_hosted_zone_id: "{{ placement.resources[0].hosted_zone_id }}"
+    sandbox_account: "{{ placement.resources[0].account_id }}"
+    sandbox_account_id: "{{ placement.resources[0].account_id }}"
+    sandbox_aws_access_key_id: >-
+      {{ (placement.resources[0].credentials
+      | selectattr('kind', 'equalto', 'aws_iam_key')
+      | selectattr('name', 'equalto', 'admin-key')
+      | first
+      ).get('aws_access_key_id') }}
+    sandbox_aws_secret_access_key: >-
+      {{ (placement.resources[0].credentials
+      | selectattr('kind', 'equalto', 'aws_iam_key')
+      | selectattr('name', 'equalto', 'admin-key')
+      | first).get('aws_secret_access_key') }}
