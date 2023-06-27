@@ -38,6 +38,7 @@ pool_manager_vault_password: "{{ aws_sandbox_manager.pool_manager_vault_password
 
 
 # Sandbox API
+sandbox_api_login_token: "{{ aws_sandbox_manager.sandbox_api_login_token | default(None) }}"
 
 sandbox_api_url: http://sandbox-api.sandbox-api.svc.cluster.local:8080
 sandbox_api_retries: 10
