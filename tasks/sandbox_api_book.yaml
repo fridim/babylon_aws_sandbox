@@ -23,8 +23,8 @@
         - kind: AwsSandbox
           count: 1
   register: r_new_placement
-  retries: sandbox_api_retries
-  delay: sandbox_api_delay
+  retries: "{{ sandbox_api_retries }}"
+  delay: "{{ sandbox_api_delay }}"
   until: r_new_placement is succeeded
 
 - name: Save placement
