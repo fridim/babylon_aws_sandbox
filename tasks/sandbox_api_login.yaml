@@ -8,7 +8,7 @@
   retries: "{{ sandbox_api_retries }}"
   delay: "{{ sandbox_api_delay }}"
   until: r_login is succeeded
-  no_log: true
+  #no_log: true
 
 - name: Save access token
   set_fact:
