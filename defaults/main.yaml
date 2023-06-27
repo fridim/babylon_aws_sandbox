@@ -45,7 +45,5 @@ sandbox_api_login_token: >-
 sandbox_api_url: >-
   {{ sandbox_api.sandbox_api_url
   | default('http://sandbox-api.sandbox-api.svc.cluster.local:8080') }}
-sandbox_api_retries: 1
-sandbox_api_delay: 1
-#sandbox_api_retries: 10
-#sandbox_api_delay: 30
+sandbox_api_retries: 10
+sandbox_api_delay: 30
