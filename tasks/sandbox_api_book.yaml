@@ -26,6 +26,7 @@
   retries: "{{ sandbox_api_retries }}"
   delay: "{{ sandbox_api_delay }}"
   until: r_new_placement is succeeded
+  changed_when: true
 
 - name: Save placement
   set_fact:
