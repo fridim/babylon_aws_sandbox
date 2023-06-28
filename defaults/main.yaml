@@ -38,9 +38,7 @@ pool_manager_vault_password: "{{ aws_sandbox_manager.pool_manager_vault_password
 
 
 # Sandbox API
-sandbox_api_login_token: >-
-  {{ sandbox_api.sandbox_api_login_token
-  | default(None) }}
+sandbox_api_login_token: "{{ sandbox_api.sandbox_api_login_token }}"
 
 sandbox_api_url: >-
   {{ sandbox_api.sandbox_api_url
