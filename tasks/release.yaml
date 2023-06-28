@@ -1,5 +1,5 @@
 ---
-- when: sandbox_api_login_token is defined
+- when: sandbox_api_login_token | default("") != ""
   block:
     - include_tasks: sandbox_api_login.yaml
     - include_tasks: sandbox_api_release.yaml
