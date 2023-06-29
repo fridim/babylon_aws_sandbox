@@ -8,5 +8,5 @@
 # any account which match uuid.
 # TODO: remove later
 # (when everything is using the sandbox-api and all services have a Placement in DB)
-- when: r_del.status == 404
+- when: r_del.status | default(404) == 404
   include_tasks: legacy_release.yaml
