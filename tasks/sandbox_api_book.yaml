@@ -1,7 +1,17 @@
 ---
+- name: Get the cluster console
+  k8s_info:
+    api_version: v1
+    kind: ConfigMap
+    namespace: openshift-config-managed
+    name: console-public
+  register: r_ocp_console_public
+  changed_when: false
+
 - name: Set ocp_console_url
   set_fact:
-    ocp_console_url: "{{ r_ocp_console_public.resources[0].data.consoleURL | default('') }}"
+    ocp_console_url: >-
+      {{ r_ocp_console_public.resources[0].data.consoleURL | default('') }}
 
 - name: Get a placement, book 1 aws sandbox
   uri:
