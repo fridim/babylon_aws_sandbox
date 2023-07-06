@@ -44,7 +44,8 @@
 
     - when: query1.Count == 1
       block:
-        - debug:
+        - name: Print information about the found sandbox
+          debug:
             msg: "{{ guid }} - {{ env_type }} and {{ query1.Items[0].name.S }} already associated"
 
         - name: Save sandbox variables
@@ -56,6 +57,7 @@
             sandbox_account_id: "{{ query1.Items[0].account_id.S }}"
             sandbox_aws_access_key_id: "{{ query1.Items[0].aws_access_key_id.S }}"
 
-        - vars:
+        - name: Unvault the IAM secret
+          vars:
             vaulted_text: "{{ query1.Items[0].aws_secret_access_key.S }}"
           include_tasks: unvault.yml

@@ -134,7 +134,8 @@
               | selectattr('name.S', 'equalto', _putaccount.stdout)
               | list }}
 
-        - when: sandbox_picked | length == 0
+        - name: Make sure at least one sandbox is returned
+          when: sandbox_picked | length == 0
           fail:
             msg: Could not get a sandbox. Probably too many concurrent requests.
 
@@ -150,6 +151,7 @@
           vars:
             _item: "{{ sandbox_picked | first }}"
 
-        - vars:
+        - name: Unvault IAM key secret
+          vars:
             vaulted_text: "{{ sandbox_aws_secret_access_key }}"
           include_tasks: unvault.yml
