@@ -1,0 +1,63 @@
+---
+- environment:
+    AWS_ACCESS_KEY_ID: "{{ pool_manager_aws_access_key_id }}"
+    AWS_SECRET_ACCESS_KEY: "{{ pool_manager_aws_secret_access_key }}"
+  block:
+    - name: Check if sandbox is already associated
+      vars:
+        _expression: >-
+          available = :a
+          and guid = :g
+          and envtype = :e
+          and attribute_exists(aws_access_key_id)
+          and attribute_exists(aws_secret_access_key)
+          and attribute_exists(hosted_zone_id)
+          and attribute_exists(#Z)
+          and attribute_exists(account_id)
+          and (
+            attribute_not_exists(service_uuid) or service_uuid = :u
+          )
+        _data:
+          ":a":
+            BOOL: false
+          ":g":
+            S: "{{ guid }}"
+          ":u":
+            S: "{{ uuid }}"
+          ":e":
+            S: "{{ env_type }}"
+      command: >-
+        aws
+        --region "{{ pool_region }}"
+        dynamodb scan
+        --table-name {{ pool_table }}
+        --filter-expression '{{ _expression }}'
+        --expression-attribute-values '{{ _data | to_json }}'
+        --expression-attribute-names '{"#Z": "zone"}'
+        --max-item 1
+      register: r_associated
+      changed_when: false
+
+    - name: Set fact of dynamodb scan
+      set_fact:
+        query1: "{{ r_associated.stdout | from_json }}"
+
+    - when: query1.Count == 1
+      block:
+        - name: Print information about the found sandbox
+          debug:
+            msg: "{{ guid }} - {{ env_type }} and {{ query1.Items[0].name.S }} already associated"
+
+        - name: Save sandbox variables
+          set_fact:
+            sandbox_name: "{{ query1.Items[0].name.S }}"
+            sandbox_zone: "{{ query1.Items[0].zone.S }}"
+            sandbox_hosted_zone_id: "{{ query1.Items[0].hosted_zone_id.S }}"
+            sandbox_account: "{{ query1.Items[0].account_id.S }}"
+            sandbox_account_id: "{{ query1.Items[0].account_id.S }}"
+            sandbox_aws_access_key_id: "{{ query1.Items[0].aws_access_key_id.S }}"
+
+        - name: Unvault the IAM secret
+          vars:
+            vaulted_text: "{{ query1.Items[0].aws_secret_access_key.S }}"
+          include_tasks: unvault.yml

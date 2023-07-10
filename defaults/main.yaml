@@ -35,3 +35,13 @@ pool_region: "{{ aws_sandbox_manager.pool_region | default('us-east-1') }}"
 pool_manager_aws_access_key_id: "{{ aws_sandbox_manager.pool_manager_aws_access_key_id | default(None) }}"
 pool_manager_aws_secret_access_key: "{{ aws_sandbox_manager.pool_manager_aws_secret_access_key | default(None) }}"
 pool_manager_vault_password: "{{ aws_sandbox_manager.pool_manager_vault_password | default(None) }}"
+
+
+# Sandbox API
+sandbox_api_login_token: "{{ sandbox_api.sandbox_api_login_token }}"
+
+sandbox_api_url: >-
+  {{ sandbox_api.sandbox_api_url
+  | default('http://sandbox-api.babylon-sandbox-api.svc.cluster.local:8080') }}
+sandbox_api_retries: 10
+sandbox_api_delay: 30
