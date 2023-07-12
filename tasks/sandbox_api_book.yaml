@@ -25,8 +25,8 @@
       annotations:
         guid: "{{ guid }}"
         env_type: "{{ env_type }}"
-        owner: "{{ student_name | default('unknown') }}"
-        owner_email: "{{ email | default('unkonwn') }}"
+        owner: "{{ student_name }}"
+        owner_email: "{{ email | default('unknown', True) }}"
         comment: "sandbox-api {{ ocp_console_url }}"
       resources:
         # TODO: parameterize this so one can order several accounts
