@@ -45,3 +45,9 @@ sandbox_api_url: >-
   | default('http://sandbox-api.babylon-sandbox-api.svc.cluster.local:8080') }}
 sandbox_api_retries: 10
 sandbox_api_delay: 30
+
+# Reservation
+sandbox_api_reservation: >-
+  {{ vars.anarchy_governor.vars.job_vars.__meta__.sandbox_api.reservation
+  | default(vars.anarchy_subject.vars.__meta__.sandbox_api.reservation)
+  | default("") }}

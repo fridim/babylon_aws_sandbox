@@ -22,6 +22,7 @@
     body_format: json
     body:
       service_uuid: "{{ uuid }}"
+      reservation: "{{ sandbox_api_reservation }}"
       annotations:
         guid: "{{ guid }}"
         env_type: "{{ env_type }}"
