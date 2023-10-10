@@ -14,6 +14,14 @@
             _yesterday: >-
               {{ ansible_date_time.epoch | int
               - babylon_aws_sandbox_min_age | int }}
+            _values:
+              ":a":
+                BOOL: true
+              ":b":
+                N: "{{ _yesterday }}"
+              ":reservation":
+                S: "{{ sandbox_api_reservation }}"
+
           command: >-
             aws
             --region {{ pool_region }}
@@ -25,9 +33,13 @@
             and attribute_exists(aws_secret_access_key)
             and attribute_exists(hosted_zone_id)
             and attribute_exists(#Z)
+            {% if sandbox_api_reservation -%}
+            and reservation = :reservation
+            {% else %}
+            and :reservation = :reservation
+            {%- endif %}
             and attribute_exists(account_id)'
-            --expression-attribute-values
-            '{":a":{"BOOL":true}, ":b":{"N":"{{_yesterday}}"}}'
+            --expression-attribute-values {{ _values | to_json | quote }}
             --expression-attribute-names
             '{"#Z": "zone", "#U": "aws:rep:updatetime"}'
             --max-item {{ buffer }}
@@ -42,6 +54,12 @@
         - when: r_shortlist_reply.Count | int == 0
           block:
             - name: Get first available sandboxes again without 24h constraint
+              vars:
+                _values:
+                  ":a":
+                    BOOL: true
+                  ":reservation":
+                    S: "{{ sandbox_api_reservation }}"
               command: >-
                 aws
                 --region {{ pool_region }}
@@ -52,8 +70,13 @@
                 and attribute_exists(aws_secret_access_key)
                 and attribute_exists(hosted_zone_id)
                 and attribute_exists(#Z)
+                {% if sandbox_api_reservation -%}
+                and reservation = :reservation
+                {% else %}
+                and :reservation = :reservation
+                {%- endif %}
                 and attribute_exists(account_id)'
-                --expression-attribute-values '{":a":{"BOOL":true}}'
+                --expression-attribute-values {{ _values | to_json | quote }}
                 --expression-attribute-names '{"#Z": "zone"}'
                 --max-item {{ buffer }}
               register: r_shortlist_bis
