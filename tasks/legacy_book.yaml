@@ -21,6 +21,8 @@
                 N: "{{ _yesterday }}"
               ":reservation":
                 S: "{{ sandbox_api_reservation }}"
+              ":empty":
+                S: ""
 
           command: >-
             aws
@@ -36,7 +38,7 @@
             {% if sandbox_api_reservation -%}
             and reservation = :reservation
             {% else %}
-            and :reservation = :reservation
+            and (attribute_not_exists(reservation) or reservation = :empty)
             {%- endif %}
             and attribute_exists(account_id)'
             --expression-attribute-values {{ _values | to_json | quote }}
@@ -60,6 +62,8 @@
                     BOOL: true
                   ":reservation":
                     S: "{{ sandbox_api_reservation }}"
+                  ":empty":
+                    S: ""
               command: >-
                 aws
                 --region {{ pool_region }}
@@ -73,7 +77,7 @@
                 {% if sandbox_api_reservation -%}
                 and reservation = :reservation
                 {% else %}
-                and :reservation = :reservation
+                and (attribute_not_exists(reservation) or reservation = :empty)
                 {%- endif %}
                 and attribute_exists(account_id)'
                 --expression-attribute-values {{ _values | to_json | quote }}
