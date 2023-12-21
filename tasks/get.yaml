@@ -8,7 +8,9 @@
 # If no placement was found, try compatibility mode (legacy), query dynamoDB
 # TODO: remove later
 # (when everything is using the sandbox-api and all services have a Placement in DB)
-- when: sandbox_name is not defined
+- when:
+    - sandbox_name is not defined
+    - pool_manager_aws_access_key_id | default('', true) != ''
   include_tasks: legacy_get.yaml
 
 # If no sandbox associated, book a new one using the Sandbox API
@@ -19,7 +21,9 @@
 
 # Keep this in case sandbox_api_token is not defined
 # TODO: remove later
-- when: sandbox_name is not defined
+- when:
+    - sandbox_name is not defined
+    - pool_manager_aws_access_key_id | default('', true) != ''
   include_tasks: legacy_book.yaml
 
 - debug:
