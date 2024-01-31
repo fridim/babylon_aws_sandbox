@@ -14,6 +14,22 @@
         - anarchy_action_config_name is defined
         # Callbacks from tower jobs and do not need sandbox info for processing
         - anarchy_action_callback_name is not defined
+        - >-
+          not (
+            (
+              'destroy' == anarchy_action_config_name | default('')
+              and
+              'complete' == anarchy_action_callback_name | default('')
+            ) or
+            'destroy-error' == current_state | default('') or
+            'destroy-failed' == current_state | default('') or
+            'destroy-canceled' == current_state | default('') or
+            (
+              'delete' == anarchy_event_name | default('')
+              and
+              __meta__.deployer.actions.destroy.disable | default(false) | bool
+            )
+          )
       include_tasks: get.yaml
 
     - name: Mark sandbox for cleanup (destroy complete, failed, or disabled)
