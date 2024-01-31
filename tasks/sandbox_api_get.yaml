@@ -12,7 +12,9 @@
   until: r_get_placement is succeeded
 
 # Placement found
-- when: r_get_placement.status == 200
+- when: >-
+    r_get_placement.status == 200
+    and r_get_placement.json.resources | default([]) | length > 0
   block:
     - name: Set placement
       set_fact:
