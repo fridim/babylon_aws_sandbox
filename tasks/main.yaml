@@ -33,6 +33,9 @@
         )
       include_tasks: release.yaml
 
+    # The following proceed with the deletion of the anarchy subject if the Placement
+    # is deleted, even if the tower job failed.
+    # TODO: add agnosticv __meta__ value to control this in case we require the tower job to succeed
     - name: Complete deletion anarchy subject on destroy failure
       when: >-
         'destroy-error' == current_state | default('') or
