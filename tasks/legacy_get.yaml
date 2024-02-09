@@ -61,3 +61,5 @@
           vars:
             vaulted_text: "{{ query1.Items[0].aws_secret_access_key.S }}"
           include_tasks: unvault.yml
+
+        - include_tasks: set_aws_sandbox.yaml

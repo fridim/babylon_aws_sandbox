@@ -182,3 +182,5 @@
           vars:
             vaulted_text: "{{ sandbox_aws_secret_access_key }}"
           include_tasks: unvault.yml
+
+        - include_tasks: set_aws_sandbox.yaml

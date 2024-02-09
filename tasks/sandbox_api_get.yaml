@@ -38,3 +38,5 @@
           | selectattr('kind', 'equalto', 'aws_iam_key')
           | selectattr('name', 'equalto', 'admin-key')
           | first).get('aws_secret_access_key') }}
+
+    - include_tasks: set_aws_sandbox.yaml
