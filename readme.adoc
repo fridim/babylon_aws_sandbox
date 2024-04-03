@@ -1,4 +1,7 @@
-= babylon_aws_sandbox
+= babylon_aws_sandbox -- DEPRECATED
+
+***THIS ROLE HAS BEEN MERGED INTO babylon_anarchy_governor***
+
 
 This roles allows you to communicate with a pool of sandbox accounts and reserve one for you.
 It is to be used in link:https://github.com/redhat-cop/babylon[Babylon] link:https://github.com/redhat-cop/anarchy[Anarchy].
